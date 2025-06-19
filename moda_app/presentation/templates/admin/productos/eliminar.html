@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Confirmar Eliminación{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card shadow-sm p-4">
+        <h3 class="mb-3 text-danger">¿Estás seguro de eliminar este producto?</h3>
+
+        <div class="mb-3">
+            <strong>Producto:</strong> {{ producto.name }} <br>
+            <strong>Precio:</strong> ${{ producto.price }} <br>
+            <strong>Categoría:</strong> {{ producto.id_categoria }}
+        </div>
+
+        {% if producto.image %}
+            <div class="mb-3">
+                <img src="{{ producto.image }}" alt="{{ producto.name }}" class="img-fluid" style="height: 100px;">
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <a href="{% url 'admin_listar_productos' %}" class="btn btn-secondary">Cancelar</a>
+            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo{% endblock %}
+
+{% block content %}
+<h2 class="mb-4 text-center">Catálogo de Moda Sostenible</h2>
+
+<!-- CATEGORÍAS COMO BOTONES -->
+<div class="mb-4 text-center">
+    {% for categoria in categorias %}
+        <a href="{% url 'filtrar_por_categoria' categoria.id %}" class="btn btn-outline-primary m-1">
+            {{ categoria.name }}
+        </a>
+    {% endfor %}
+</div>
+
+<!-- PRODUCTOS -->
+<div class="row">
+    {% for producto in productos %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                {% if producto.image %}
+                   <img src="{{ producto.image }}" alt="{{ producto.name }}"
+                        class="img-fluid rounded"
+                        style="height: 300px; width: auto; object-fit: contain; display: block; margin: 0 auto;">
+
+
+
+                {% else %}
+                    <div class="card-img-top bg-secondary text-white text-center d-flex align-items-center justify-content-center" style="height: 250px;">
+                        <span>Sin imagen</span>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ producto.name }}</h5>
+                    <p class="card-text">{{ producto.description|truncatechars:100 }}</p>
+                    <p class="card-text fw-bold">${{ producto.price }}</p>
+                    <a href="{% url 'detalle_producto' producto.id %}" class="btn btn-primary w-100">Ver más</a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center">
+            <p>No hay productos disponibles.</p>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

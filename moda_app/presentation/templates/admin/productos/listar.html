@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Productos - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Productos registrados</h2>
+    <a href="{% url 'admin_crear_producto' %}" class="btn btn-success">+ Agregar producto</a>
+</div>
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<div class="table-responsive">
+<table class="table table-striped table-bordered align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">Imagen</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Disponible</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for producto in productos %}
+        <tr>
+            <td style="width: 100px;">
+                {% if producto.image %}
+                    <img src="{{ producto.image }}" alt="Imagen de {{ producto.name }}" class="img-thumbnail" style="height: 50px;">
+                {% else %}
+                    <span class="text-muted">Sin imagen</span>
+                {% endif %}
+            </td>
+            <td>{{ producto.name }}</td>
+            <td>${{ producto.price }}</td>
+            <td>
+                {% if producto.disponibilidad %}
+                    <span class="badge bg-success">Sí</span>
+                {% else %}
+                    <span class="badge bg-danger">No</span>
+                {% endif %}
+            </td>
+            <td>{{ producto.id_categoria }}</td>
+            <td>
+                <a href="{% url 'admin_editar_producto' producto.id %}" class="btn btn-sm btn-primary">Editar</a>
+                <a href="{% url 'admin_eliminar_producto' producto.id %}" class="btn btn-sm btn-danger"
+                onclick="return confirm('¿Estás seguro de eliminar este producto?')">Eliminar</a>
+                <a href="{% url 'admin_editar_inventario' producto.id %}" class="btn btn-sm btn-warning">Inventario</a>
+            </td>
+
+
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center text-muted">No hay productos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

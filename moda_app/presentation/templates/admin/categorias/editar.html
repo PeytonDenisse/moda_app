@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Editar Categoría{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Editar categoría: {{ categoria.name }}</h2>
+
+    <form method="post" class="card p-4 shadow-sm border-0">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" name="name" class="form-control" value="{{ categoria.name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea name="description" class="form-control" rows="3" required>{{ categoria.description }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Actualizar categoría</button>
+    </form>
+</div>
+{% endblock %}

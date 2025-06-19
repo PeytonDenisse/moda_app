@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Editar Inventario{% endblock %}
+
+{% block content %}
+<h2>Editar Inventario del Producto</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">Cantidad</label>
+        <input type="number" name="quantity" value="{{ inventario.quantity }}" class="form-control" min="0" required>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Estado</label>
+        <select name="status" class="form-select">
+            <option value="Disponible" {% if inventario.status == 'Disponible' %}selected{% endif %}>Disponible</option>
+            <option value="Agotado" {% if inventario.status == 'Agotado' %}selected{% endif %}>Agotado</option>
+            <option value="Próximamente" {% if inventario.status == 'Próximamente' %}selected{% endif %}>Próximamente</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Actualizar Inventario</button>
+    <a href="{% url 'admin_listar_productos' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}
