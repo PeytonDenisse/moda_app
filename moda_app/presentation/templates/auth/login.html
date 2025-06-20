@@ -3,28 +3,59 @@
 {% block title %}Iniciar Sesión - Admin{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-        <h2 class="mb-4 text-center">Iniciar Sesión</h2>
+<div class="container py-5" style="min-height: 80vh;">
+  <div class="row justify-content-center align-items-center h-100">
+    <div class="col-md-5 col-lg-4">
+      <div class="card shadow-lg rounded-5 border-0 p-5" style="background: linear-gradient(135deg, #527a8e 0%, #2c3e50 100%);">
+        <h2 class="text-white text-center mb-4 fw-bold" style="letter-spacing: 1.5px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5);">
+          Iniciar Sesión
+        </h2>
 
         {% if form.errors %}
-            <div class="alert alert-danger">
-                Usuario o contraseña incorrectos. Intenta nuevamente.
-            </div>
+          <div class="alert alert-light text-center rounded-pill shadow-sm" style="font-weight: 600;">
+            Usuario o contraseña incorrectos. Intenta nuevamente.
+          </div>
         {% endif %}
 
-        <form method="post" class="card p-4 shadow-sm border-0">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="id_username" class="form-label">Usuario</label>
-                {{ form.username }}
-            </div>
-            <div class="mb-3">
-                <label for="id_password" class="form-label">Contraseña</label>
-                {{ form.password }}
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <div class="mb-4">
+            <label for="id_username" class="form-label text-white fw-semibold" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.4);">
+              Usuario
+            </label>
+            {{ form.username }}
+          </div>
+          <div class="mb-4">
+            <label for="id_password" class="form-label text-white fw-semibold" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.4);">
+              Contraseña
+            </label>
+            {{ form.password }}
+          </div>
+          <button type="submit" class="btn btn-light w-100 rounded-pill fw-bold py-2 shadow-sm" style="letter-spacing: 1px;">
+            Entrar
+          </button>
         </form>
+      </div>
     </div>
+  </div>
 </div>
+
+<style>
+  input {
+    border-radius: 30px !important;
+    padding-left: 20px !important;
+    height: 45px !important;
+    border: none !important;
+    box-shadow: 0 0 8px rgba(255,255,255,0.35) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    color: #222 !important;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  input:focus {
+    box-shadow: 0 0 14px #c7d7e5 !important;
+    outline: none !important;
+  }
+</style>
 {% endblock %}

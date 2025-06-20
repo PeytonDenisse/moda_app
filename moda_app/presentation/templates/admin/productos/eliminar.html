@@ -2,26 +2,75 @@
 {% block title %}Confirmar Eliminación{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="card shadow-sm p-4">
-        <h3 class="mb-3 text-danger">¿Estás seguro de eliminar este producto?</h3>
+<style>
+    .delete-wrapper {
+        background-color: #f8f9fa;
+        padding: 60px 0;
+        display: flex;
+        justify-content: center;
+    }
 
-        <div class="mb-3">
-            <strong>Producto:</strong> {{ producto.name }} <br>
-            <strong>Precio:</strong> ${{ producto.price }} <br>
-            <strong>Categoría:</strong> {{ producto.id_categoria }}
+    .delete-card {
+        max-width: 550px;
+        width: 100%;
+        background-color: #fff;
+        border-left: 6px solid #dc3545;
+        border-radius: 12px;
+        padding: 35px 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .delete-card h3 {
+        color: #dc3545;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
+    .delete-details {
+        font-size: 1.05rem;
+        line-height: 1.6;
+    }
+
+    .img-preview {
+        height: 110px;
+        object-fit: contain;
+        background-color: #f1f1f1;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+    }
+
+    .btn-cancel {
+        border: 1px solid #6c757d;
+        background-color: #fff;
+        color: #6c757d;
+        transition: 0.2s;
+    }
+
+    .btn-cancel:hover {
+        background-color: #e9ecef;
+    }
+</style>
+
+<div class="delete-wrapper">
+    <div class="delete-card">
+        <h3>¿Estás seguro de eliminar este producto?</h3>
+
+        <div class="delete-details mb-4">
+            <p><strong>Producto:</strong> {{ producto.name }}</p>
+            <p><strong>Precio:</strong> ${{ producto.price }}</p>
+            <p><strong>Categoría:</strong> {{ producto.id_categoria }}</p>
         </div>
 
         {% if producto.image %}
-            <div class="mb-3">
-                <img src="{{ producto.image }}" alt="{{ producto.name }}" class="img-fluid" style="height: 100px;">
+            <div class="mb-4 text-center">
+                <img src="{{ producto.image }}" alt="{{ producto.name }}" class="img-preview">
             </div>
         {% endif %}
 
-        <form method="post">
+        <form method="post" class="d-flex justify-content-between">
             {% csrf_token %}
-            <a href="{% url 'admin_listar_productos' %}" class="btn btn-secondary">Cancelar</a>
-            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            <a href="{% url 'admin_listar_productos' %}" class="btn btn-cancel px-4">Cancelar</a>
+            <button type="submit" class="btn btn-danger px-4 fw-semibold">Sí, eliminar</button>
         </form>
     </div>
 </div>

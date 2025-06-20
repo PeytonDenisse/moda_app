@@ -2,25 +2,74 @@
 {% block title %}Editar Producto{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2 class="mb-4">Editar producto: {{ producto.name }}</h2>
+<style>
+    .edit-wrapper {
+        background-color: #f8f9fa;
+        padding: 50px 0;
+        display: flex;
+        justify-content: center;
+    }
 
-    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm border-0">
+    .edit-form {
+        max-width: 650px;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 16px;
+        padding: 40px 30px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .edit-form h2 {
+        text-align: center;
+        color: #0d6efd;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .form-label {
+        font-weight: 500;
+    }
+
+    .btn-back {
+        border: 1px solid #6c757d;
+        color: #6c757d;
+        background-color: #fff;
+        transition: 0.2s;
+    }
+
+    .btn-back:hover {
+        background-color: #e9ecef;
+        border-color: #6c757d;
+    }
+
+    .img-preview {
+        height: 100px;
+        object-fit: contain;
+        border: 1px solid #dee2e6;
+        background-color: #f1f1f1;
+        border-radius: 6px;
+    }
+</style>
+
+<div class="edit-wrapper">
+    <form method="post" enctype="multipart/form-data" class="edit-form">
         {% csrf_token %}
 
-        <div class="mb-3">
+        <h2>Editar producto: {{ producto.name }}</h2>
+
+        <div class="mb-4">
             <label class="form-label">Nombre</label>
-            <input type="text" name="name" class="form-control" value="{{ producto.name }}" required>
+            <input type="text" name="name" class="form-control form-control-lg" value="{{ producto.name }}" required>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label class="form-label">Descripción</label>
-            <textarea name="description" class="form-control" rows="3" required>{{ producto.description }}</textarea>
+            <textarea name="description" class="form-control form-control-lg" rows="4" required>{{ producto.description }}</textarea>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label class="form-label">Categoría</label>
-            <select name="id_categoria" class="form-select" required>
+            <select name="id_categoria" class="form-select form-select-lg" required>
                 {% for categoria in categorias %}
                     <option value="{{ categoria.id }}" {% if categoria.id == producto.id_categoria %}selected{% endif %}>
                         {{ categoria.name }}
@@ -29,31 +78,38 @@
             </select>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label class="form-label">Precio</label>
-            <input type="number" name="price" step="0.01" class="form-control" value="{{ producto.price }}" required>
+            <input type="number" name="price" step="0.01" class="form-control form-control-lg" value="{{ producto.price }}" required>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label class="form-label">Disponibilidad</label>
-            <div class="form-check">
+            <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" name="disponibilidad" id="disponible"
                        {% if producto.disponibilidad %}checked{% endif %}>
                 <label class="form-check-label" for="disponible">Producto disponible</label>
             </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
             <label class="form-label">Imagen actual</label><br>
             {% if producto.image %}
-                <img src="{{ producto.image }}" alt="{{ producto.name }}" class="img-fluid mb-2" style="height: 100px;">
+                <img src="{{ producto.image }}" alt="{{ producto.name }}" class="img-preview mb-2">
             {% else %}
-                <p class="text-muted">No hay imagen cargada.</p>
+                <p class="text-muted fst-italic">No hay imagen cargada.</p>
             {% endif %}
-            <input type="url" name="image" class="form-control" placeholder="https://...">
+            <input type="url" name="image" class="form-control form-control-lg mt-2" placeholder="https://...">
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Actualizar producto</button>
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="{% url 'admin_listar_productos' %}" class="btn btn-back px-4">
+                ← Regresar
+            </a>
+            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                Actualizar producto
+            </button>
+        </div>
     </form>
 </div>
 {% endblock %}

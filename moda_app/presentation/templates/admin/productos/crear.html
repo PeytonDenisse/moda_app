@@ -2,52 +2,55 @@
 {% block title %}Agregar Producto{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2 class="mb-4">Agregar nuevo producto</h2>
+<div class="container py-5" style="max-width: 600px;">
+    <h2 class="mb-5 text-center fw-bold text-primary" style="letter-spacing: 1.1px;">Agregar nuevo producto</h2>
 
-    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-sm border-0">
+    <form method="post" enctype="multipart/form-data" class="card p-4 shadow-lg rounded-4 border-0 bg-light">
         {% csrf_token %}
 
-        <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" name="name" class="form-control" required>
+        <div class="mb-4">
+            <label for="id_name" class="form-label fw-semibold">Nombre</label>
+            <input type="text" name="name" id="id_name" class="form-control form-control-lg" placeholder="Nombre del producto" required>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <textarea name="description" class="form-control" rows="3" required></textarea>
+        <div class="mb-4">
+            <label for="id_description" class="form-label fw-semibold">Descripción</label>
+            <textarea name="description" id="id_description" class="form-control" rows="4" placeholder="Descripción detallada" required></textarea>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Categoría</label>
-            <select name="id_categoria" class="form-select" required>
-                <option value="">-- Selecciona una categoría --</option>
+        <div class="mb-4">
+            <label for="id_categoria" class="form-label fw-semibold">Categoría</label>
+            <select name="id_categoria" id="id_categoria" class="form-select form-select-lg" required>
+                <option value="" disabled selected>-- Selecciona una categoría --</option>
                 {% for categoria in categorias %}
                     <option value="{{ categoria.id }}">{{ categoria.name }}</option>
                 {% endfor %}
             </select>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Precio</label>
-            <input type="number" name="price" step="0.01" class="form-control" required>
+        <div class="mb-4">
+            <label for="id_price" class="form-label fw-semibold">Precio</label>
+            <input type="number" name="price" step="0.01" id="id_price" class="form-control form-control-lg" placeholder="0.00" min="0" required>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Disponibilidad</label>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="disponibilidad" id="disponible">
-                <label class="form-check-label" for="disponible">Producto disponible</label>
-            </div>
+        <div class="mb-4 form-check form-switch">
+            <input class="form-check-input" type="checkbox" name="disponibilidad" id="disponible">
+            <label class="form-check-label fw-semibold" for="disponible">Producto disponible</label>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Imagen del producto</label>
-            <input type="url" name="image" class="form-control" placeholder="https://...">
-
+        <div class="mb-4">
+            <label for="id_image" class="form-label fw-semibold">Imagen del producto (URL)</label>
+            <input type="url" name="image" id="id_image" class="form-control form-control-lg" placeholder="https://ejemplo.com/imagen.jpg">
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Guardar producto</button>
+        <div class="d-flex justify-content-between gap-3">
+            <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm flex-grow-1" style="letter-spacing: 1px;">
+                Guardar producto
+            </button>
+            <a href="{% url 'admin_listar_productos' %}" class="btn btn-outline-secondary btn-lg fw-bold shadow-sm flex-grow-1">
+                Volver a la lista
+            </a>
+        </div>
     </form>
 </div>
 {% endblock %}

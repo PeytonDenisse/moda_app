@@ -3,25 +3,54 @@
 {% block title %}Panel de Administración{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <h2 class="mb-4 text-center">Panel de Administración</h2>
+<div class="container py-5">
+    <h2 class="mb-5 text-center fw-bold text-primary" style="letter-spacing: 1.2px;">Panel de Administración</h2>
 
-    <div class="row justify-content-center">
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'admin_listar_productos' %}" class="btn btn-outline-primary w-100 p-4 shadow-sm">
-                📦 Gestión de Productos
+    <div class="row justify-content-center g-4">
+        <div class="col-md-4">
+            <a href="{% url 'admin_listar_productos' %}" 
+               class="d-flex flex-column align-items-center justify-content-center btn shadow-lg rounded-4 border border-primary text-primary text-decoration-none p-5 h-100"
+               style="background: #e3f2fd; transition: background-color 0.3s, transform 0.3s;">
+                <span style="font-size: 3rem;">📦</span>
+                <h4 class="mt-3 fw-semibold">Gestión de Productos</h4>
             </a>
         </div>
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'admin_listar_categorias' %}" class="btn btn-outline-success w-100 p-4 shadow-sm">
-                🗂️ Gestión de Categorías
+        <div class="col-md-4">
+            <a href="{% url 'admin_listar_categorias' %}" 
+               class="d-flex flex-column align-items-center justify-content-center btn shadow-lg rounded-4 border border-success text-success text-decoration-none p-5 h-100"
+               style="background: #e6f4ea; transition: background-color 0.3s, transform 0.3s;">
+                <span style="font-size: 3rem;">🗂️</span>
+                <h4 class="mt-3 fw-semibold">Gestión de Categorías</h4>
             </a>
         </div>
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'admin_listar_inventario' %}" class="btn btn-outline-warning w-100 p-4 shadow-sm">
-                📊 Gestión de Inventario
+        <div class="col-md-4">
+            <a href="{% url 'admin_listar_inventario' %}" 
+               class="d-flex flex-column align-items-center justify-content-center btn shadow-lg rounded-4 border border-warning text-warning text-decoration-none p-5 h-100"
+               style="background: #fff8e1; transition: background-color 0.3s, transform 0.3s;">
+                <span style="font-size: 3rem;">📊</span>
+                <h4 class="mt-3 fw-semibold">Gestión de Inventario</h4>
             </a>
         </div>
     </div>
 </div>
+
+<style>
+    a.btn:hover {
+        background-color: #c8defd !important;
+        transform: translateY(-6px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+        text-decoration: none !important;
+    }
+    /* Ajustar hover por colores individuales */
+    a.btn.border-success:hover {
+        background-color: #cdf3d7 !important;
+        transform: translateY(-6px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+    }
+    a.btn.border-warning:hover {
+        background-color: #fff4b7 !important;
+        transform: translateY(-6px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+    }
+</style>
 {% endblock %}
