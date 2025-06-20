@@ -3,34 +3,49 @@
 {% block title %}{{ producto.name }} - Detalles{% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <a href="{% url 'catalogo_home' %}" class="btn btn-outline-secondary mb-4">← Volver al catálogo</a>
+<div class="container py-5">
+    <a href="{% url 'catalogo_home' %}" class="btn btn-outline-secondary rounded-pill mb-4 shadow-sm">
+        ← Volver al catálogo
+    </a>
 
-    <div class="row">
-        <!-- IMAGEN -->
-        <div class="col-md-6">
+    <div class="row align-items-center">
+        <!-- IMAGEN DEL PRODUCTO -->
+        <div class="col-md-6 mb-4 mb-md-0">
             {% if producto.image %}
-                <img src="{{ producto.image }}" alt="{{ producto.name }}" class="img-fluid rounded shadow-sm">
+                <img src="{{ producto.image }}" alt="{{ producto.name }}" 
+                     class="img-fluid rounded-4 shadow-lg w-100"
+                     style="max-height: 450px; object-fit: cover;">
             {% else %}
-                <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center" style="height: 400px;">
-                    <span>Sin imagen</span>
+                <div class="bg-secondary text-white text-center d-flex align-items-center justify-content-center rounded-4 shadow-lg"
+                     style="height: 450px;">
+                    <span class="fs-4">Sin imagen disponible</span>
                 </div>
             {% endif %}
         </div>
 
-        <!-- DETALLES -->
+        <!-- DETALLES DEL PRODUCTO -->
         <div class="col-md-6">
-            <h2>{{ producto.name }}</h2>
-            <p class="text-muted">{{ producto.description }}</p>
-            <p><strong>Precio:</strong> ${{ producto.price }}</p>
-            <p>
-                <strong>Disponibilidad:</strong>
-                {% if producto.disponibilidad %}
-                    <span class="text-success">Disponible</span>
-                {% else %}
-                    <span class="text-danger">No disponible</span>
-                {% endif %}
-            </p>
+            <h1 class="fw-bold mb-3 text-primary">{{ producto.name }}</h1>
+            <p class="text-muted mb-4">{{ producto.description }}</p>
+
+            <ul class="list-unstyled mb-4">
+                <li class="mb-2">
+                    <strong class="me-2">Precio:</strong> 
+                    <span class="fs-5 text-success fw-semibold">${{ producto.price }}</span>
+                </li>
+                <li class="mb-2">
+                    <strong class="me-2">Disponibilidad:</strong>
+                    {% if producto.disponibilidad %}
+                        <span class="badge bg-success rounded-pill px-3 py-2">Disponible</span>
+                    {% else %}
+                        <span class="badge bg-danger rounded-pill px-3 py-2">No disponible</span>
+                    {% endif %}
+                </li>
+                <li class="mb-2">
+                    <strong class="me-2">Última actualización:</strong>
+                    <span class="text-muted">{{ producto.last_updated|date:"d M Y" }}</span>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

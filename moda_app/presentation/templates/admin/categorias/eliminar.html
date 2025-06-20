@@ -2,19 +2,23 @@
 {% block title %}Eliminar Categoría{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="card shadow-sm p-4">
-        <h3 class="mb-3 text-danger">¿Estás seguro de eliminar esta categoría?</h3>
+<div class="container py-5" style="max-width: 600px;">
+    <div class="card shadow-lg p-4 rounded-4 border-0 bg-light">
+        <h3 class="mb-4 text-danger fw-bold">¿Estás seguro de eliminar esta categoría?</h3>
 
-        <div class="mb-3">
-            <strong>Nombre:</strong> {{ categoria.name }}<br>
-            <strong>Descripción:</strong> {{ categoria.description }}
+        <div class="mb-4">
+            <p><strong>Nombre:</strong> {{ categoria.name }}</p>
+            <p><strong>Descripción:</strong> {{ categoria.description }}</p>
         </div>
 
-        <form method="post">
+        <form method="post" class="d-flex justify-content-between">
             {% csrf_token %}
-            <a href="{% url 'admin_listar_categorias' %}" class="btn btn-secondary">Cancelar</a>
-            <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+            <a href="{% url 'admin_listar_categorias' %}" class="btn btn-outline-secondary fw-semibold shadow-sm px-4">
+                Cancelar
+            </a>
+            <button type="submit" class="btn btn-danger fw-bold shadow-sm px-4">
+                Sí, eliminar
+            </button>
         </form>
     </div>
 </div>

@@ -2,23 +2,34 @@
 {% block title %}Crear Categoría{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2 class="mb-4">Agregar nueva categoría</h2>
+<div class="container py-5" style="max-width: 600px;">
+    
+    <h2 class="mb-4 text-center fw-bold text-primary" style="letter-spacing: 1px;">
+        Agregar nueva categoría
+    </h2>
 
-    <form method="post" class="card p-4 shadow-sm border-0">
+    <form method="post" class="card p-4 shadow-lg rounded-4 border-0 bg-light">
         {% csrf_token %}
 
         <div class="mb-3">
-            <label class="form-label">Nombre</label>
-            <input type="text" name="name" class="form-control" required>
+            <label class="form-label fw-semibold">Nombre</label>
+            <input type="text" name="name" class="form-control form-control-lg" placeholder="Ej: Accesorios" required>
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <textarea name="description" class="form-control" rows="3" required></textarea>
+            <label class="form-label fw-semibold">Descripción</label>
+            <textarea name="description" class="form-control form-control-lg" rows="4" placeholder="Describe brevemente la categoría..." required></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Guardar categoría</button>
+        <!-- Contenedor flex para los botones -->
+        <div class="d-flex justify-content-between align-items-center mt-4">
+            <a href="{% url 'admin_listar_categorias' %}" class="btn btn-outline-secondary fw-semibold shadow-sm">
+                ← Volver a la lista
+            </a>
+            <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm px-4">
+                Guardar categoría
+            </button>
+        </div>
     </form>
 </div>
 {% endblock %}
