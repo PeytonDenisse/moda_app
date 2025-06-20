@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
+from moda_app.persistence.models import Product, Category
 
 # Producto
 @dataclass
@@ -31,3 +32,5 @@ class InventoryEntity:
     quantity: int
     status: str
     last_updated: datetime
+    product: Optional[Product] = None    
+    category: Optional[Category] = None  

@@ -29,6 +29,7 @@ urlpatterns = [
     path('', catalogo_home, name='catalogo_home'),
     path('categoria/<int:id>/', filtrar_por_categoria, name='filtrar_por_categoria'),
     path('producto/<int:id>/', detalle_producto, name='detalle_producto'),
+    
 
     # ----- LOGIN / LOGOUT -----
     path('accounts/login/', auth_views.LoginView.as_view(template_name='auth/login.html'), name='login'),

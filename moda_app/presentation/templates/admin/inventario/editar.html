@@ -2,26 +2,44 @@
 {% block title %}Editar Inventario{% endblock %}
 
 {% block content %}
-<h2>Editar Inventario del Producto</h2>
+<div class="container py-5" style="max-width: 480px;">
+    <h2 class="mb-4 text-center text-primary fw-bold">Editar inventario: {{ producto_nombre }}</h2>
 
-<form method="post">
-    {% csrf_token %}
+    <form method="post" class="card p-4 shadow border-0">
+      
+        {% csrf_token %}
 
-    <div class="mb-3">
-        <label class="form-label">Cantidad</label>
-        <input type="number" name="quantity" value="{{ inventario.quantity }}" class="form-control" min="0" required>
-    </div>
+        <div class="mb-3">
+            <label for="quantity" class="form-label fw-semibold">Cantidad</label>
+            <input
+              type="number"
+              id="quantity"
+              name="quantity"
+              min="0"
+              class="form-control form-control-lg"
+              value="{{ inventario.quantity }}"
+              required
+              autofocus
+            >
+        </div>
 
-    <div class="mb-3">
-        <label class="form-label">Estado</label>
-        <select name="status" class="form-select">
-            <option value="Disponible" {% if inventario.status == 'Disponible' %}selected{% endif %}>Disponible</option>
-            <option value="Agotado" {% if inventario.status == 'Agotado' %}selected{% endif %}>Agotado</option>
-            <option value="Próximamente" {% if inventario.status == 'Próximamente' %}selected{% endif %}>Próximamente</option>
-        </select>
-    </div>
+        {# Estado oculto: no se muestra, solo se envía #}
+        {% if inventario.quantity == 0 %}
+            <input type="hidden" name="status" value="Agotado">
+        {% else %}
+            <input type="hidden" name="status" value="Disponible">
+        {% endif %}
 
-    <button type="submit" class="btn btn-primary">Actualizar Inventario</button>
-    <a href="{% url 'admin_listar_productos' %}" class="btn btn-secondary">Cancelar</a>
-</form>
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'admin_listar_inventario' %}" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left"></i> Volver al inventario
+            </a>
+            <input type="hidden" name="next" value="{{ next }}">
+
+            <button type="submit" class="btn btn-primary fw-semibold">
+              <i class="bi bi-save"></i> Guardar cambios
+            </button>
+        </div>
+    </form>
+</div>
 {% endblock %}

@@ -27,9 +27,24 @@ def admin_home(request):
 @login_required
 def admin_listar_productos(request):
     productos = producto_service.get_all()
+    categorias = categoria_service.get_all()
+    inventarios = inventario_service.get_all()
+    
+    inventario_por_producto = {inv.product_id: inv for inv in inventarios}
+
+    productos_con_inventario = []
+    for prod in productos:
+        prod_inventario = inventario_por_producto.get(prod.id)
+        productos_con_inventario.append({
+            'producto': prod,
+            'inventario': prod_inventario
+        })
+
     return render(request, 'admin/productos/listar.html', {
-        'productos': productos
+        'productos_con_inventario': productos_con_inventario,
+        'categorias': categorias
     })
+
 
 
 """Formulario para crear un nuevo producto """
@@ -45,7 +60,6 @@ def admin_crear_producto(request):
         price = float(request.POST.get('price'))
         image = request.POST.get('image')
 
-
         nuevo = ProductEntity(
             id=None,
             name=name,
@@ -57,13 +71,26 @@ def admin_crear_producto(request):
             last_updated=None
         )
 
-        producto_service.create(nuevo)
-        messages.success(request, "Producto creado correctamente.")
+        producto_creado = producto_service.create(nuevo)
+
+        # Crear inventario con cantidad 0 y estado "Disponible"
+        nuevo_inventario = InventoryEntity(
+            id=None,  # aquí pasas None para que se cree uno nuevo
+            product_id=producto_creado.id,
+            category_id=producto_creado.id_categoria,
+            quantity=0,
+            status="Disponible",
+            last_updated=None
+        )
+        inventario_service.create(nuevo_inventario)
+
+        messages.success(request, "Producto e inventario creados correctamente.")
         return redirect('admin_listar_productos')
 
     return render(request, 'admin/productos/crear.html', {
         'categorias': categorias
     })
+
 
 
 
@@ -200,24 +227,43 @@ def admin_editar_inventario(request, id):
 
     if not inventario:
         messages.error(request, "No hay inventario registrado para este producto.")
-        return redirect('admin_listar_productos')
+        next_url = request.GET.get('next')
+        if next_url == 'productos':
+            return redirect('admin_listar_productos')
+        else:
+            return redirect('admin_listar_inventario')
 
     if request.method == 'POST':
-        cantidad = int(request.POST.get('quantity'))
-        status = request.POST.get('status')
+        try:
+            cantidad = int(request.POST.get('quantity'))
+        except (TypeError, ValueError):
+            messages.error(request, "Cantidad inválida.")
+            return redirect('admin_editar_inventario', id=id)
 
-        # Evita valores negativos
         if cantidad < 0:
             messages.error(request, "La cantidad no puede ser negativa.")
             return redirect('admin_editar_inventario', id=id)
+
+        status = "Agotado" if cantidad == 0 else "Disponible"
 
         inventario.quantity = cantidad
         inventario.status = status
         inventario_service.update(inventario)
 
-        messages.success(request, "Inventario actualizado.")
-        return redirect('admin_listar_productos')
+        messages.success(request, "Inventario actualizado correctamente.")
+
+        # Leer next de POST o GET para redireccionar
+        next_url = request.POST.get('next', request.GET.get('next'))
+        if next_url == 'productos':
+            return redirect('admin_listar_productos')
+        else:
+            return redirect('admin_listar_inventario')
+
+    producto = producto_service.get_by_id(inventario.product_id)
+    producto_nombre = producto.name if producto else "Producto desconocido"
 
     return render(request, 'admin/inventario/editar.html', {
-        'inventario': inventario
+        'inventario': inventario,
+        'producto_nombre': producto_nombre,
+        'next': request.GET.get('next', 'inventario'), 
     })
