@@ -2,70 +2,75 @@
 {% block title %}Productos - Admin{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <a href="{% url 'admin_home' %}" class="btn btn-outline-secondary fw-semibold">
-        ← Volver al panel
-    </a>
-    <a href="{% url 'admin_crear_producto' %}" class="btn btn-success fw-semibold shadow-sm">
-        + Agregar producto
-    </a>
+<div class="row align-items-center mb-4">
+    <div class="col-auto">
+        <a href="{% url 'admin_home' %}" class="btn btn-outline-secondary fw-semibold shadow-sm">
+            ← Volver al panel
+        </a>
+    </div>
+    <div class="col text-center">
+        <h2 class="mb-0 fw-bold text-primary">Productos registrados</h2>
+    </div>
+    <div class="col-auto text-end">
+        <a href="{% url 'admin_crear_producto' %}" class="btn btn-success fw-semibold shadow-sm">
+            + Agregar producto
+        </a>
+    </div>
 </div>
 
-<h2 class="fw-bold text-primary mb-4">Productos registrados</h2>
-
 <div class="table-responsive shadow-sm rounded">
-<table class="table table-striped align-middle mb-0">
-    <thead class="table-dark">
-        <tr>
-            <th scope="col" style="width: 110px;">Imagen</th>
-            <th scope="col">Nombre</th>
-            <th scope="col" style="width: 110px;">Precio</th>
-            <th scope="col" style="width: 100px;">Disponible</th>
-            <th scope="col">Categoría</th>
-            <th scope="col" style="width: 230px;">Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for producto in productos %}
-        <tr>
-            <td>
-                {% if producto.image %}
-                    <img src="{{ producto.image }}" alt="Imagen de {{ producto.name }}" class="img-thumbnail" style="height: 60px; object-fit: contain;">
-                {% else %}
-                    <span class="text-muted fst-italic">Sin imagen</span>
-                {% endif %}
-            </td>
-            <td class="fw-semibold">{{ producto.name }}</td>
-            <td class="text-success fw-bold">${{ producto.price }}</td>
-            <td>
-                {% if producto.disponibilidad %}
-                    <span class="badge bg-success">Sí</span>
-                {% else %}
-                    <span class="badge bg-danger">No</span>
-                {% endif %}
-            </td>
-            <td>{{ producto.id_categoria }}</td>
-            <td>
-                <div class="d-flex flex-row flex-nowrap gap-2">
-                    <a href="{% url 'admin_editar_producto' producto.id %}" class="btn btn-sm btn-primary" title="Editar producto">
-                        Editar
-                    </a>
-                    <a href="{% url 'admin_eliminar_producto' producto.id %}" class="btn btn-sm btn-danger" title="Eliminar producto"
-                       onclick="return confirm('¿Estás seguro de eliminar este producto?')">
-                        Eliminar
-                    </a>
-                    <a href="{% url 'admin_editar_inventario' producto.id %}" class="btn btn-sm btn-warning" title="Gestionar inventario">
-                        Inventario
-                    </a>
-                </div>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6" class="text-center text-muted fst-italic py-4">No hay productos registrados.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <table class="table table-striped align-middle mb-0">
+        <thead class="table-dark">
+            <tr>
+                <th style="width: 110px;">Imagen</th>
+                <th>Nombre</th>
+                <th style="width: 110px;">Precio</th>
+                <th style="width: 100px;">Disponible</th>
+                <th>Categoría</th>
+                <th style="width: 230px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>
+                    {% if producto.image %}
+                        <img src="{{ producto.image }}" alt="Imagen de {{ producto.name }}" class="img-thumbnail" style="height: 60px; object-fit: contain;">
+                    {% else %}
+                        <span class="text-muted fst-italic">Sin imagen</span>
+                    {% endif %}
+                </td>
+                <td class="fw-semibold">{{ producto.name }}</td>
+                <td class="text-success fw-bold">${{ producto.price }}</td>
+                <td>
+                    {% if producto.disponibilidad %}
+                        <span class="badge bg-success">Sí</span>
+                    {% else %}
+                        <span class="badge bg-danger">No</span>
+                    {% endif %}
+                </td>
+                <td>{{ producto.id_categoria }}</td>
+                <td>
+                    <div class="d-flex flex-row flex-nowrap gap-2">
+                        <a href="{% url 'admin_editar_producto' producto.id %}" class="btn btn-sm btn-primary" title="Editar producto">
+                            Editar
+                        </a>
+                        <a href="{% url 'admin_eliminar_producto' producto.id %}" class="btn btn-sm btn-danger" title="Eliminar producto"
+                           onclick="return confirm('¿Estás seguro de eliminar este producto?')">
+                            Eliminar
+                        </a>
+                        <a href="{% url 'admin_editar_inventario' producto.id %}" class="btn btn-sm btn-warning" title="Gestionar inventario">
+                            Inventario
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center text-muted fst-italic py-4">No hay productos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
