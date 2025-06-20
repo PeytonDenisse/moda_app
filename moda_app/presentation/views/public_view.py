@@ -6,12 +6,12 @@ from moda_app.service.category_service import CategoryService
 # Servicios
 producto_service = ProductService()
 categoria_service = CategoryService()
-inventario_service = InventoryService(  )
+inventario_service = InventoryService()
+
 """
     Vista pública
     Muestra todos los productos y las categorías
 """
-
 def catalogo_home(request):
     productos = producto_service.get_all()
     categorias = categoria_service.get_all()
@@ -29,6 +29,7 @@ def catalogo_home(request):
         'categorias': categorias,
         'categoria_actual': None
     })
+
 
 def filtrar_por_categoria(request, id):
     productos = [p for p in producto_service.get_all() if p.id_categoria == id]
@@ -50,10 +51,10 @@ def filtrar_por_categoria(request, id):
         'categoria_actual': categoria_actual
     })
 
+
 """
     Muestra el detalle de un producto.
 """
-
 def detalle_producto(request, id):
     producto = producto_service.get_by_id(id)
     if not producto:
@@ -69,4 +70,3 @@ def detalle_producto(request, id):
     return render(request, 'public/detalle_producto.html', {
         'producto': producto
     })
-

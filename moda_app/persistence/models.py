@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.contrib.auth.models import User
-
+from django.core.exceptions import ValidationError
 
 
 
@@ -63,3 +63,13 @@ class Inventory(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.quantity} disponibles"
+    
+    def clean(self):
+        # Validar que quantity no sea negativo
+        if self.quantity < 0:
+            raise ValidationError("La cantidad no puede ser negativa.")
+
+    def save(self, *args, **kwargs):
+        # Ejecutar validaciones antes de guardar
+        self.full_clean()
+        super().save(*args, **kwargs)
