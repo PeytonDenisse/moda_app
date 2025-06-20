@@ -221,20 +221,20 @@ def admin_editar_inventario(request, id):
             messages.error(request, "Cantidad inválida.")
             return redirect('admin_editar_inventario', id=id)
 
-        status = request.POST.get('status')
-
         if cantidad < 0:
             messages.error(request, "La cantidad no puede ser negativa.")
             return redirect('admin_editar_inventario', id=id)
+
+        # Estado calculado automáticamente
+        status = "Agotado" if cantidad == 0 else "Disponible"
 
         inventario.quantity = cantidad
         inventario.status = status
         inventario_service.update(inventario)
 
-        messages.success(request, "Inventario actualizado.")
+        messages.success(request, "Inventario actualizado correctamente.")
         return redirect('admin_listar_inventario')
 
-    # Obtener el nombre del producto para mostrar en el template
     producto = producto_service.get_by_id(inventario.product_id)
     producto_nombre = producto.name if producto else "Producto desconocido"
 
