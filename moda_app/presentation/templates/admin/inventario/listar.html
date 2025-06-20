@@ -33,19 +33,19 @@
             <td>{{ item.category.name }}</td>
             <td>{{ item.quantity }}</td>
             <td>
-              {% if item.status == "Disponible" %}
-                <span class="badge bg-success">{{ item.status }}</span>
-              {% elif item.status == "Agotado" %}
-                <span class="badge bg-danger">{{ item.status }}</span>
+              {% if item.quantity > 0 %}
+                  <span class="badge bg-success">Disponible</span>
               {% else %}
-                <span class="badge bg-secondary">{{ item.status }}</span>
+                  <span class="badge bg-danger">Agotado</span>
               {% endif %}
+
             </td>
             <td>
               {% if item.product and item.product.id %}
-                <a href="{% url 'admin_editar_inventario' item.product.id %}" class="btn btn-sm btn-warning" title="Editar Inventario">
-                  <i class="bi bi-pencil-square"></i> Editar
+                <a href="{% url 'admin_editar_inventario' item.product.id %}?next=inventario" class="btn btn-sm btn-warning" title="Editar Inventario">
+                    <i class="bi bi-pencil-square"></i> Editar
                 </a>
+
               {% else %}
                 <span class="text-muted fst-italic">Sin producto asignado</span>
               {% endif %}

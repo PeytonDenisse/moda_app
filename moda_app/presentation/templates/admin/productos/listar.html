@@ -31,35 +31,45 @@
             </tr>
         </thead>
         <tbody>
-            {% for producto in productos %}
+            {% for item in productos_con_inventario %}
             <tr>
                 <td>
-                    {% if producto.image %}
-                        <img src="{{ producto.image }}" alt="Imagen de {{ producto.name }}" class="img-thumbnail" style="height: 60px; object-fit: contain;">
+                    {% if item.producto.image %}
+                        <img src="{{ item.producto.image }}" alt="Imagen de {{ item.producto.name }}" class="img-thumbnail" style="height: 60px; object-fit: contain;">
                     {% else %}
                         <span class="text-muted fst-italic">Sin imagen</span>
                     {% endif %}
                 </td>
-                <td class="fw-semibold">{{ producto.name }}</td>
-                <td class="text-success fw-bold">${{ producto.price }}</td>
+                <td class="fw-semibold">{{ item.producto.name }}</td>
+                <td class="text-success fw-bold">${{ item.producto.price }}</td>
                 <td>
-                    {% if producto.disponibilidad %}
-                        <span class="badge bg-success">Sí</span>
+                    {% if item.inventario %}
+                        {% if item.inventario.quantity > 0 %}
+                            <span class="badge bg-success">Sí</span>
+                        {% else %}
+                            <span class="badge bg-danger">No</span>
+                        {% endif %}
                     {% else %}
-                        <span class="badge bg-danger">No</span>
+                        <span class="text-muted fst-italic">Sin inventario</span>
                     {% endif %}
                 </td>
-                <td>{{ producto.id_categoria }}</td>
+                <td>
+                    {% for categoria in categorias %}
+                        {% if categoria.id|add:0 == item.producto.id_categoria|add:0 %}
+                            {{ categoria.name }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
                 <td>
                     <div class="d-flex flex-row flex-nowrap gap-2">
-                        <a href="{% url 'admin_editar_producto' producto.id %}" class="btn btn-sm btn-primary" title="Editar producto">
+                        <a href="{% url 'admin_editar_producto' item.producto.id %}" class="btn btn-sm btn-primary" title="Editar producto">
                             Editar
                         </a>
-                        <a href="{% url 'admin_eliminar_producto' producto.id %}" class="btn btn-sm btn-danger" title="Eliminar producto"
-                           onclick="return confirm('¿Estás seguro de eliminar este producto?')">
+                        <a href="{% url 'admin_eliminar_producto' item.producto.id %}" class="btn btn-sm btn-danger" title="Eliminar producto"
+                            onclick="return confirm('¿Estás seguro de eliminar este producto?')">
                             Eliminar
                         </a>
-                        <a href="{% url 'admin_editar_inventario' producto.id %}" class="btn btn-sm btn-warning" title="Gestionar inventario">
+                        <a href="{% url 'admin_editar_inventario' item.producto.id %}?next=productos" class="btn btn-sm btn-warning" title="Gestionar inventario">
                             Inventario
                         </a>
                     </div>
@@ -70,6 +80,7 @@
                 <td colspan="6" class="text-center text-muted fst-italic py-4">No hay productos registrados.</td>
             </tr>
             {% endfor %}
+
         </tbody>
     </table>
 </div>

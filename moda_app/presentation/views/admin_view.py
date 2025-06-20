@@ -27,9 +27,24 @@ def admin_home(request):
 @login_required
 def admin_listar_productos(request):
     productos = producto_service.get_all()
+    categorias = categoria_service.get_all()
+    inventarios = inventario_service.get_all()
+    
+    inventario_por_producto = {inv.product_id: inv for inv in inventarios}
+
+    productos_con_inventario = []
+    for prod in productos:
+        prod_inventario = inventario_por_producto.get(prod.id)
+        productos_con_inventario.append({
+            'producto': prod,
+            'inventario': prod_inventario
+        })
+
     return render(request, 'admin/productos/listar.html', {
-        'productos': productos
+        'productos_con_inventario': productos_con_inventario,
+        'categorias': categorias
     })
+
 
 
 """Formulario para crear un nuevo producto """
@@ -212,7 +227,11 @@ def admin_editar_inventario(request, id):
 
     if not inventario:
         messages.error(request, "No hay inventario registrado para este producto.")
-        return redirect('admin_listar_inventario')
+        next_url = request.GET.get('next')
+        if next_url == 'productos':
+            return redirect('admin_listar_productos')
+        else:
+            return redirect('admin_listar_inventario')
 
     if request.method == 'POST':
         try:
@@ -225,7 +244,6 @@ def admin_editar_inventario(request, id):
             messages.error(request, "La cantidad no puede ser negativa.")
             return redirect('admin_editar_inventario', id=id)
 
-        # Estado calculado automáticamente
         status = "Agotado" if cantidad == 0 else "Disponible"
 
         inventario.quantity = cantidad
@@ -233,7 +251,13 @@ def admin_editar_inventario(request, id):
         inventario_service.update(inventario)
 
         messages.success(request, "Inventario actualizado correctamente.")
-        return redirect('admin_listar_inventario')
+
+        # Leer next de POST o GET para redireccionar
+        next_url = request.POST.get('next', request.GET.get('next'))
+        if next_url == 'productos':
+            return redirect('admin_listar_productos')
+        else:
+            return redirect('admin_listar_inventario')
 
     producto = producto_service.get_by_id(inventario.product_id)
     producto_nombre = producto.name if producto else "Producto desconocido"
@@ -241,4 +265,5 @@ def admin_editar_inventario(request, id):
     return render(request, 'admin/inventario/editar.html', {
         'inventario': inventario,
         'producto_nombre': producto_nombre,
+        'next': request.GET.get('next', 'inventario'), 
     })
