@@ -55,10 +55,18 @@ def filtrar_por_categoria(request, id):
 """
 
 def detalle_producto(request, id):
-    
     producto = producto_service.get_by_id(id)
     if not producto:
         return render(request, 'public/no_encontrado.html', status=404)
+
+    # Obtener todos los inventarios
+    inventarios = inventario_service.get_all()
+
+    # Buscar cantidad del producto actual
+    inventario = next((inv for inv in inventarios if inv.product_id == producto.id), None)
+    producto.cantidad = inventario.quantity if inventario else 0
+
     return render(request, 'public/detalle_producto.html', {
         'producto': producto
     })
+
