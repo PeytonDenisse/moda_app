@@ -26,12 +26,16 @@
     <tbody>
         {% for item in inventario %}
         <tr>
-            <td>{{ item.product_name }}</td>
-            <td>{{ item.category_name }}</td>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.category.name }}</td>
             <td>{{ item.quantity }}</td>
             <td>{{ item.status }}</td>
             <td>
-                <a href="{% url 'admin_editar_inventario' item.id %}" class="btn btn-sm btn-warning">Editar</a>
+                {% if item.product and item.product.id %}
+                    <a href="{% url 'admin_editar_inventario' item.product.id %}" class="btn btn-sm btn-warning">Editar</a>
+                {% else %}
+                    <span class="text-muted">Sin producto asignado</span>
+                    {% endif %}
             </td>
         </tr>
         {% endfor %}

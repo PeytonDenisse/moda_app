@@ -143,7 +143,7 @@ class InventoryRepository:
 
     @staticmethod
     def get_all() -> List[InventoryEntity]:
-        inventarios = Inventory.objects.all()
+        inventarios = Inventory.objects.select_related('product', 'category').all()
         return [
             InventoryEntity(
                 id=inv.id,
@@ -151,7 +151,9 @@ class InventoryRepository:
                 category_id=inv.category.id,
                 quantity=inv.quantity,
                 status=inv.status,
-                last_updated=inv.last_updated
+                last_updated=inv.last_updated,
+                product=inv.product, 
+                category=inv.category    
             ) for inv in inventarios
         ]
 

@@ -45,7 +45,6 @@ def admin_crear_producto(request):
         price = float(request.POST.get('price'))
         image = request.POST.get('image')
 
-
         nuevo = ProductEntity(
             id=None,
             name=name,
@@ -57,13 +56,26 @@ def admin_crear_producto(request):
             last_updated=None
         )
 
-        producto_service.create(nuevo)
-        messages.success(request, "Producto creado correctamente.")
+        producto_creado = producto_service.create(nuevo)
+
+        # Crear inventario con cantidad 0 y estado "Disponible"
+        nuevo_inventario = InventoryEntity(
+            id=None,  # aquí pasas None para que se cree uno nuevo
+            product_id=producto_creado.id,
+            category_id=producto_creado.id_categoria,
+            quantity=0,
+            status="Disponible",
+            last_updated=None
+        )
+        inventario_service.create(nuevo_inventario)
+
+        messages.success(request, "Producto e inventario creados correctamente.")
         return redirect('admin_listar_productos')
 
     return render(request, 'admin/productos/crear.html', {
         'categorias': categorias
     })
+
 
 
 
@@ -200,13 +212,17 @@ def admin_editar_inventario(request, id):
 
     if not inventario:
         messages.error(request, "No hay inventario registrado para este producto.")
-        return redirect('admin_listar_productos')
+        return redirect('admin_listar_inventario')
 
     if request.method == 'POST':
-        cantidad = int(request.POST.get('quantity'))
+        try:
+            cantidad = int(request.POST.get('quantity'))
+        except (TypeError, ValueError):
+            messages.error(request, "Cantidad inválida.")
+            return redirect('admin_editar_inventario', id=id)
+
         status = request.POST.get('status')
 
-        # Evita valores negativos
         if cantidad < 0:
             messages.error(request, "La cantidad no puede ser negativa.")
             return redirect('admin_editar_inventario', id=id)
@@ -216,8 +232,13 @@ def admin_editar_inventario(request, id):
         inventario_service.update(inventario)
 
         messages.success(request, "Inventario actualizado.")
-        return redirect('admin_listar_productos')
+        return redirect('admin_listar_inventario')
+
+    # Obtener el nombre del producto para mostrar en el template
+    producto = producto_service.get_by_id(inventario.product_id)
+    producto_nombre = producto.name if producto else "Producto desconocido"
 
     return render(request, 'admin/inventario/editar.html', {
-        'inventario': inventario
+        'inventario': inventario,
+        'producto_nombre': producto_nombre,
     })
