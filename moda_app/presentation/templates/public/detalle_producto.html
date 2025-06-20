@@ -4,12 +4,13 @@
 
 {% block content %}
 <div class="container py-5">
+    <!-- Botón para volver -->
     <a href="{% url 'catalogo_home' %}" class="btn btn-outline-secondary rounded-pill mb-4 shadow-sm">
         ← Volver al catálogo
     </a>
 
     <div class="row align-items-center">
-        <!-- IMAGEN DEL PRODUCTO -->
+        <!-- Imagen del producto -->
         <div class="col-md-6 mb-4 mb-md-0">
             {% if producto.image %}
                 <img src="{{ producto.image }}" alt="{{ producto.name }}" 
@@ -23,29 +24,44 @@
             {% endif %}
         </div>
 
-        <!-- DETALLES DEL PRODUCTO -->
+        <!-- Detalles del producto -->
         <div class="col-md-6">
             <h1 class="fw-bold mb-3 text-primary">{{ producto.name }}</h1>
             <p class="text-muted mb-4">{{ producto.description }}</p>
 
-            <ul class="list-unstyled mb-4">
-                <li class="mb-2">
+            <ul class="list-unstyled mb-4 fs-5">
+                <li class="mb-3">
                     <strong class="me-2">Precio:</strong> 
-                    <span class="fs-5 text-success fw-semibold">${{ producto.price }}</span>
+                    <span class="text-success fw-semibold">${{ producto.price }}</span>
                 </li>
-                <li class="mb-2">
+                <li class="mb-3">
                     <strong class="me-2">Disponibilidad:</strong>
-                    {% if producto.disponibilidad %}
+                    {% if producto.cantidad > 0 %}
                         <span class="badge bg-success rounded-pill px-3 py-2">Disponible</span>
                     {% else %}
                         <span class="badge bg-danger rounded-pill px-3 py-2">No disponible</span>
                     {% endif %}
                 </li>
-                <li class="mb-2">
+                <li class="mb-3">
+                    <strong class="me-2">Cantidad en stock:</strong> 
+                    <span class="text-dark">{{ producto.cantidad }}</span>
+                </li>
+                <li class="mb-3">
                     <strong class="me-2">Última actualización:</strong>
                     <span class="text-muted">{{ producto.last_updated|date:"d M Y" }}</span>
                 </li>
             </ul>
+
+            <!-- Botón simulado de acción -->
+            {% if producto.cantidad > 0 %}
+                <button class="btn btn-primary w-100 rounded-pill fw-semibold shadow-sm">
+                    Agregar al carrito
+                </button>
+            {% else %}
+                <button class="btn btn-secondary w-100 rounded-pill fw-semibold shadow-sm" disabled>
+                    No disponible
+                </button>
+            {% endif %}
         </div>
     </div>
 </div>
